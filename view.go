@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Bios-Marcel/tview"
 	"github.com/gdamore/tcell"
-	"github.com/rivo/tview"
 )
 
 // The View struct stores information about a view into a buffer.
@@ -579,8 +579,11 @@ func ShowMultiCursor(screen tcell.Screen, x, y, i int) {
 }
 
 // Draw renders the view and the cursor
-func (v *View) Draw(screen tcell.Screen) {
-	v.Box.Draw(screen)
+func (v *View) Draw(screen tcell.Screen) bool {
+	if !v.Box.Draw(screen) {
+		return false
+	}
+
 	v.x, v.y, v.width, v.height = v.Box.GetInnerRect()
 
 	// TODO(pdg): just clear from the last line down.
@@ -600,4 +603,6 @@ func (v *View) Draw(screen tcell.Screen) {
 	if v.Buf.Settings["scrollbar"].(bool) {
 		v.scrollbar.Display(screen)
 	}
+
+	return true
 }
