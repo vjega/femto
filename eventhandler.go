@@ -109,7 +109,8 @@ func (eh *EventHandler) Insert(start Loc, text string) {
 		Time:      time.Now(),
 	}
 	eh.Execute(e)
-	e.Deltas[0].End = start.Move(Count(text), eh.buf)
+	charCount := Count(text)
+	e.Deltas[0].End = start.Move(charCount, eh.buf)
 	end := e.Deltas[0].End
 
 	for _, c := range eh.buf.cursors {
@@ -117,7 +118,7 @@ func (eh *EventHandler) Insert(start Loc, text string) {
 			if start.Y != end.Y && loc.GreaterThan(start) {
 				loc.Y += end.Y - start.Y
 			} else if loc.Y == start.Y && loc.GreaterEqual(start) {
-				loc = loc.Move(Count(text), eh.buf)
+				loc = loc.Move(charCount, eh.buf)
 			}
 			return loc
 		}
