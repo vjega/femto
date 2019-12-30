@@ -8,7 +8,6 @@ import (
 
 	"github.com/gdamore/tcell"
 	"github.com/Bios-Marcel/femto"
-	"github.com/Bios-Marcel/femto/runtime"
 	"github.com/Bios-Marcel/tview"
 )
 
@@ -28,18 +27,9 @@ func main() {
 		log.Fatalf("could not read %v: %v", path, err)
 	}
 
-	var colorscheme femto.Colorscheme
-	if monokai := runtime.Files.FindFile(femto.RTColorscheme, "monokai"); monokai != nil {
-		if data, err := monokai.Data(); err == nil {
-			colorscheme = femto.ParseColorscheme(string(data))
-		}
-	}
-
 	app := tview.NewApplication()
 	buffer := femto.NewBufferFromString(string(content), path)
 	root := femto.NewView(buffer)
-	root.SetRuntimeFiles(runtime.Files)
-	root.SetColorscheme(colorscheme)
 	root.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyCtrlS:

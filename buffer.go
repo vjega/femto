@@ -5,8 +5,6 @@ import (
 	"io"
 	"strings"
 	"unicode/utf8"
-
-	"github.com/zyedidia/micro/cmd/micro/highlight"
 )
 
 const LargeFileThreshold = 50000
@@ -42,9 +40,6 @@ type Buffer struct {
 
 	// NumLines is the number of lines in the buffer
 	NumLines int
-
-	syntaxDef   *highlight.Def
-	highlighter *highlight.Highlighter
 
 	// Hash of the original buffer -- empty if fastdirty is on
 	origHash [md5.Size]byte
@@ -107,70 +102,6 @@ func NewBuffer(reader io.Reader, size int64, path string, cursorPosition []strin
 // for this buffer
 func (b *Buffer) GetName() string {
 	return b.name
-}
-
-// updateRules updates the syntax rules and filetype for this buffer
-// This is called when the colorscheme changes
-func (b *Buffer) updateRules(runtimeFiles *RuntimeFiles) {
-	if runtimeFiles == nil {
-		return
-	}
-
-	rehighlight := false
-	var files []*highlight.File
-	for _, f := range runtimeFiles.ListRuntimeFiles(RTSyntax) {
-		data, err := f.Data()
-		if err == nil {
-			file, err := highlight.ParseFile(data)
-			if err != nil {
-				continue
-			}
-			ftdetect, err := highlight.ParseFtDetect(file)
-			if err != nil {
-				continue
-			}
-
-			ft := b.Settings["filetype"].(string)
-			if (ft == "Unknown" || ft == "") && !rehighlight {
-				if highlight.MatchFiletype(ftdetect, b.Path, b.lines[0].data) {
-					header := new(highlight.Header)
-					header.FileType = file.FileType
-					header.FtDetect = ftdetect
-					b.syntaxDef, err = highlight.ParseDef(file, header)
-					if err != nil {
-						continue
-					}
-					rehighlight = true
-				}
-			} else {
-				if file.FileType == ft && !rehighlight {
-					header := new(highlight.Header)
-					header.FileType = file.FileType
-					header.FtDetect = ftdetect
-					b.syntaxDef, err = highlight.ParseDef(file, header)
-					if err != nil {
-						continue
-					}
-					rehighlight = true
-				}
-			}
-			files = append(files, file)
-		}
-	}
-
-	if b.syntaxDef != nil {
-		highlight.ResolveIncludes(b.syntaxDef, files)
-	}
-
-	if b.highlighter == nil || rehighlight {
-		if b.syntaxDef != nil {
-			b.Settings["filetype"] = b.syntaxDef.FileType
-			b.highlighter = highlight.NewHighlighter(b.syntaxDef)
-			if b.Settings["syntax"].(bool) {
-				b.highlighter.HighlightStates(b)
-			}
-		}
-	}
 }
 
 // FileType returns the buffer's filetype
@@ -386,14 +317,6 @@ func (b *Buffer) MoveLinesDown(start int, end int) {
 		Loc{0, end},
 		Loc{0, end + 1},
 	)
-}
-
-// ClearMatches clears all of the syntax highlighting for this buffer
-func (b *Buffer) ClearMatches() {
-	for i := range b.lines {
-		b.SetMatch(i, nil)
-		b.SetState(i, nil)
-	}
 }
 
 func (b *Buffer) clearCursors() {

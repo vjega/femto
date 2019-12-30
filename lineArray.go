@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"io"
 	"unicode/utf8"
-
-	"github.com/zyedidia/micro/cmd/micro/highlight"
 )
 
 func runeToByteIndex(n int, txt []byte) int {
@@ -33,10 +31,6 @@ func runeToByteIndex(n int, txt []byte) int {
 // and a flag for whether the highlighting needs to be updated
 type Line struct {
 	data []byte
-
-	state       highlight.State
-	match       highlight.LineMatch
-	rehighlight bool
 }
 
 // A LineArray simply stores and array of lines and makes it easy to insert
@@ -100,14 +94,14 @@ func NewLineArray(size int64, reader io.Reader) *LineArray {
 
 		if err != nil {
 			if err == io.EOF {
-				la.lines = Append(la.lines, Line{data[:], nil, nil, false})
+				la.lines = Append(la.lines, Line{data[:]})
 				// la.lines = Append(la.lines, Line{data[:len(data)]})
 			}
 			// Last line was read
 			break
 		} else {
 			// la.lines = Append(la.lines, Line{data[:len(data)-1]})
-			la.lines = Append(la.lines, Line{data[:len(data)-1], nil, nil, false})
+			la.lines = Append(la.lines, Line{data[:len(data)-1]})
 		}
 		n++
 	}
@@ -146,9 +140,9 @@ func (la *LineArray) SaveString(useCrlf bool) string {
 
 // NewlineBelow adds a newline below the given line number
 func (la *LineArray) NewlineBelow(y int) {
-	la.lines = append(la.lines, Line{[]byte{' '}, nil, nil, false})
+	la.lines = append(la.lines, Line{[]byte{' '}})
 	copy(la.lines[y+2:], la.lines[y+1:])
-	la.lines[y+1] = Line{[]byte{}, la.lines[y].state, nil, false}
+	la.lines[y+1] = Line{[]byte{}}
 }
 
 // inserts a byte array at a given location
@@ -184,11 +178,6 @@ func (la *LineArray) JoinLines(a, b int) {
 func (la *LineArray) Split(pos Loc) {
 	la.NewlineBelow(pos.Y)
 	la.insert(Loc{0, pos.Y + 1}, la.lines[pos.Y].data[pos.X:])
-	la.lines[pos.Y+1].state = la.lines[pos.Y].state
-	la.lines[pos.Y].state = nil
-	la.lines[pos.Y].match = nil
-	la.lines[pos.Y+1].match = nil
-	la.lines[pos.Y].rehighlight = true
 	la.DeleteToEnd(Loc{pos.X, pos.Y})
 }
 
@@ -246,22 +235,3 @@ func (la *LineArray) Substr(start, end Loc) string {
 	return str
 }
 
-// State gets the highlight state for the given line number
-func (la *LineArray) State(lineN int) highlight.State {
-	return la.lines[lineN].state
-}
-
-// SetState sets the highlight state at the given line number
-func (la *LineArray) SetState(lineN int, s highlight.State) {
-	la.lines[lineN].state = s
-}
-
-// SetMatch sets the match at the given line number
-func (la *LineArray) SetMatch(lineN int, m highlight.LineMatch) {
-	la.lines[lineN].match = m
-}
-
-// Match retrieves the match for the given line number
-func (la *LineArray) Match(lineN int) highlight.LineMatch {
-	return la.lines[lineN].match
-}

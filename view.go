@@ -61,9 +61,6 @@ type View struct {
 
 	// The colorscheme
 	colorscheme Colorscheme
-
-	// The runtime files
-	runtimeFiles *RuntimeFiles
 }
 
 // NewView returns a new view with the specified buffer.
@@ -108,18 +105,6 @@ func (v *View) GetKeybindings() KeyBindings {
 // SetKeybindings sets the keybindings for this view.
 func (v *View) SetKeybindings(bindings KeyBindings) {
 	v.bindings = bindings
-}
-
-// SetColorscheme sets the colorscheme for this view.
-func (v *View) SetColorscheme(colorscheme Colorscheme) {
-	v.colorscheme = colorscheme
-	v.Buf.updateRules(v.runtimeFiles)
-}
-
-// SetRuntimeFiles sets the runtime files for this view.
-func (v *View) SetRuntimeFiles(runtimeFiles *RuntimeFiles) {
-	v.runtimeFiles = runtimeFiles
-	v.Buf.updateRules(v.runtimeFiles)
 }
 
 func (v *View) paste(clip string) {

@@ -20,13 +20,6 @@ func visualToCharPos(visualIndex int, lineN int, str string, buf *Buffer, colors
 	var width int
 	var rw int
 	for i, c := range str {
-		// width := StringWidth(str[:i], tabsize)
-
-		if group, ok := buf.Match(lineN)[charPos]; ok {
-			s := colorscheme.GetColor(group.String())
-			style = &s
-		}
-
 		if width >= visualIndex {
 			return charPos, visualIndex - lastWidth, style
 		}
@@ -98,18 +91,6 @@ func (c *CellView) Draw(buf *Buffer, colorscheme Colorscheme, top, height, left,
 	}
 	indentchar := indentrunes[0]
 
-	start := buf.Cursor.Y
-	if buf.Settings["syntax"].(bool) && buf.syntaxDef != nil {
-		if start > 0 && buf.lines[start-1].rehighlight {
-			buf.highlighter.ReHighlightLine(buf, start-1)
-			buf.lines[start-1].rehighlight = false
-		}
-
-		buf.highlighter.ReHighlightStates(buf, start)
-
-		buf.highlighter.HighlightMatches(buf, top, top+height)
-	}
-
 	c.lines = make([][]*Char, 0)
 
 	viewLine := 0
@@ -149,9 +130,6 @@ func (c *CellView) Draw(buf *Buffer, colorscheme Colorscheme, top, height, left,
 		for viewCol < lineLength {
 			if colN >= len(line) {
 				break
-			}
-			if group, ok := buf.Match(lineN)[colN]; ok {
-				curStyle = colorscheme.GetColor(group.String())
 			}
 
 			char := line[colN]
@@ -220,19 +198,9 @@ func (c *CellView) Draw(buf *Buffer, colorscheme Colorscheme, top, height, left,
 			}
 
 		}
-		if group, ok := buf.Match(lineN)[len(line)]; ok {
-			curStyle = colorscheme.GetColor(group.String())
-		}
 
 		// newline
 		viewLine++
 		lineN++
-	}
-
-	for i := top; i < top+height; i++ {
-		if i >= buf.NumLines {
-			break
-		}
-		buf.SetMatch(i, nil)
 	}
 }

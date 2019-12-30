@@ -8,7 +8,6 @@ require (
 	github.com/gdamore/tcell v1.3.1-0.20191115014413-b6a97de0c118
 	github.com/mattn/go-runewidth v0.0.7
 	github.com/sergi/go-diff v1.1.0
-	github.com/zyedidia/micro v1.4.1
 	golang.org/x/sys v0.0.0-20191224085550-c709ea063b76 // indirect
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 )
