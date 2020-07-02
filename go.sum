@@ -1,5 +1,7 @@
 github.com/Bios-Marcel/tview v0.0.0-20200222160847-9e022c4dffcd h1:PHsKXsC27RNkoyk257KV/yyuEimaPJiMavm0Z0ktE8E=
 github.com/Bios-Marcel/tview v0.0.0-20200222160847-9e022c4dffcd/go.mod h1:LI4Pwi1HXdNKIxks12tMt5stClEHfvpKpTL9uEotslI=
+github.com/Bios-Marcel/tview v0.0.0-20200702213012-e4f3922ee220 h1:vzYn+X4OIDInRcNzy5Urwr3kPeqS3E4XbOqpuzt7jio=
+github.com/Bios-Marcel/tview v0.0.0-20200702213012-e4f3922ee220/go.mod h1:LI4Pwi1HXdNKIxks12tMt5stClEHfvpKpTL9uEotslI=
 github.com/atotto/clipboard v0.1.2 h1:YZCtFu5Ie8qX2VmVTBnrqLSiU9XOWwqNRmdT3gIQzbY=
 github.com/atotto/clipboard v0.1.2/go.mod h1:ZY9tmq7sm5xIbd9bOK4onWV4S6X0u6GY7Vn0Yu86PYI=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=

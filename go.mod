@@ -3,7 +3,7 @@ module github.com/Bios-Marcel/femto
 go 1.12
 
 require (
-	github.com/Bios-Marcel/tview v0.0.0-20200222160847-9e022c4dffcd
+	github.com/Bios-Marcel/tview v0.0.0-20200702213012-e4f3922ee220
 	github.com/atotto/clipboard v0.1.2
 	github.com/gdamore/tcell v1.3.1-0.20200206054723-bac2bbc5b394
 	github.com/mattn/go-runewidth v0.0.7
