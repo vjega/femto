@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/gdamore/tcell"
-	"github.com/Bios-Marcel/femto"
-	"github.com/Bios-Marcel/tview"
+	"github.com/rivo/tview"
+	"github.com/vjega/femto"
 )
 
 func saveBuffer(b *femto.Buffer, path string) error {

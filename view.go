@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Bios-Marcel/tview"
 	"github.com/gdamore/tcell"
+	"github.com/rivo/tview"
 )
 
 // The View struct stores information about a view into a buffer.
