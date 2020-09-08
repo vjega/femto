@@ -565,9 +565,9 @@ func ShowMultiCursor(screen tcell.Screen, x, y, i int) {
 
 // Draw renders the view and the cursor
 func (v *View) Draw(screen tcell.Screen) bool {
-	if !v.Box.Draw(screen) {
-		return false
-	}
+	// if !v.Box.Draw(screen) {
+	// 	return false
+	// }
 
 	v.x, v.y, v.width, v.height = v.Box.GetInnerRect()
 
